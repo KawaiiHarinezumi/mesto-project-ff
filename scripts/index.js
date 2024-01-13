@@ -17,7 +17,6 @@ function addCard(link, name, dlt) {
   return cardElement;
 }
 
-
 // @todo: Функция удаления карточки
 function deleteCard(evt) {
   const deleteButton = evt.target;
