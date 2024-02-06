@@ -1,38 +1,79 @@
 import './index.js';
 import {initialCards} from './cards.js';
 import '../pages/index.css';
+import {renderCard} from '../components/card.js';
+import {openPopup, closePopup} from '../components/modal.js';
 
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content; //получаем содержимое темплейта
+const popupsDict = [
+  {
+    popup: document.querySelector('.popup_type_edit'),
+    button: document.querySelector('.profile__edit-button'),
+  },
+  {
+    popup: document.querySelector('.popup_type_new-card'),
+    button: document.querySelector('.profile__add-button'),
+  },
+];
 
-// @todo: DOM узлы
-const cardContainer = document.querySelector('.places__list'); //куда будем добавлять карточки
+document.querySelector('.profile').addEventListener('click', function(evt) {
+  for (let i = 0; i < popupsDict.length; i++) {
+    if (evt.target === popupsDict[i].button) {
+      openPopup(popupsDict[i].popup);
+      break;
+    }
+  }
+});
 
-// @todo: Функция создания карточки
-function addCard(cardData, deleteCard) {
-  const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true); //клонируем темплейт
-  cardElement.querySelector('.card__image').src = cardData.link;
-  cardElement.querySelector('.card__title').textContent = cardData.name;
+// константы профиля
+const formElementProfile = document.querySelector('[name="edit-profile"]');
+const nameInput = formElementProfile.querySelector('.popup__input_type_name');
+const jobInput = formElementProfile.querySelector('.popup__input_type_description');
+const nameProfile = document.querySelector('.profile__title');
+const descProfile = document.querySelector('.profile__description');
 
-  const deleteButton = cardElement.querySelector('.card__delete-button'); //кнопка удаления
-  deleteButton.addEventListener('click', deleteCard);
+// функция редактирования страницы
+function handleFormSubmit(evt) {
+  const saveButton = evt.target;
+  const popup = saveButton.closest('.popup');
+  
+  evt.preventDefault();
 
-  return cardElement;
+  nameProfile.textContent = nameInput.value;
+  descProfile.textContent = jobInput.value;
+  nameInput.setAttribute('value', nameInput.value);
+  jobInput.setAttribute('value', jobInput.value);
+  closePopup(popup);
 }
 
-function renderCard(card) {
-  const cardElement = addCard(card, deleteCard);
-  cardContainer.append(cardElement);
+// константы добавления карточки
+const formElementCard = document.querySelector('[name="new-place"]');
+const nameCard = formElementCard.querySelector('.popup__input_type_card-name');
+const imageInput = formElementCard.querySelector('.popup__input_type_url');
+
+// функция добавления новой карточки
+function handleCardSubmit(evt) {
+  const saveButton = evt.target;
+  const popup = saveButton.closest('.popup');
+
+  evt.preventDefault();
+  
+  const cardData = {
+    name: nameCard.value,
+    link: imageInput.value,
+  }
+
+  renderCard(cardData);
+  closePopup(popup);
 }
 
-// @todo: Функция удаления карточки
-function deleteCard(evt) {
-  const deleteButton = evt.target;
-  const cardItem = deleteButton.closest('.places__item');
-  cardItem.remove();
-}
+formElementProfile.addEventListener('submit', handleFormSubmit); // слушатель формы редактирования страницы
+formElementCard.addEventListener('submit', handleCardSubmit); // слушатель формы добавления новой карточки
 
-// @todo: Вывести карточки на страницу
-initialCards.forEach((item) => {
+// @todo: задание дефолтных значений редактирования профиля
+nameInput.setAttribute('value', nameProfile.textContent);
+jobInput.setAttribute('value', descProfile.textContent);
+
+// @todo: выводим карточки на страницу
+initialCards.reverse().forEach((item) => {
   renderCard(item);
 });
