@@ -11,12 +11,9 @@ export function openPopup(popup) {
 export function closePopup(popup) {
   popup.classList.remove('popup_is-opened');
 
-  const form = popup.querySelector('.popup__form');
-  if (form) {
-    form.reset();
-  }
-
   document.removeEventListener('keydown', pressEsc);
+  document.removeEventListener('click', pressOverlay);
+  popup.querySelector('.popup__close').removeEventListener('click', pressCross);
 }
 
 // функция нажатия на крестик

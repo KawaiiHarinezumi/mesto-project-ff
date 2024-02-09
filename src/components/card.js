@@ -1,8 +1,9 @@
-import {openPopup} from './modal.js';
+// константы
+const cardTemplate = document.querySelector('#card-template').content; //получаем содержимое темплейта
+const cardContainer = document.querySelector('.places__list'); //куда будем добавлять карточки
 
 // функция создания карточки
-function addCard(cardData, deleteCard, likeCard, imageView) {
-  const cardTemplate = document.querySelector('#card-template').content; //получаем содержимое темплейта
+function addCard(cardData, deleteCard, likeCard, viewImage) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true); //клонируем темплейт
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
@@ -10,27 +11,19 @@ function addCard(cardData, deleteCard, likeCard, imageView) {
   const likeButton = cardElement.querySelector('.card__like-button');
   
   cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
   deleteButton.addEventListener('click', deleteCard); //слушатель кнопки удаления
-  cardImage.addEventListener('click', imageView);  //слушатель клика по картинке
+  cardImage.addEventListener('click', viewImage);  //слушатель клика по картинке
   likeButton.addEventListener('click', likeCard); //слушатель кнопки лайка
 
   return cardElement;
 }
 
-// функция открытия картинки
-function imageView(evt) {
-  const popup = document.querySelector('.popup_type_image');
-
-  popup.querySelector('.popup__image').src = evt.target.src;
-  openPopup(popup);
-}
-
 // функция рендера карточки
-export function renderCard(card) {
-  const cardContainer = document.querySelector('.places__list'); //куда будем добавлять карточки
-  const cardElement = addCard(card, deleteCard, likeCard, imageView);
+export function renderCard(card, viewImage) {
+  const cardElement = addCard(card, deleteCard, likeCard, viewImage);
 
   cardContainer.prepend(cardElement);
 }
