@@ -3,11 +3,6 @@ const token = 'cf791a1a-25ef-4fca-8258-53a9d49cba1e';
 const cohort = 'wff-cohort-7';
 const serverURL = 'https://nomoreparties.co/v1';
 
-// константы профиля
-const avatar = document.querySelector('.profile__image');
-const name = document.querySelector('.profile__title');
-const about = document.querySelector('.profile__description');
-
 // обработчик ошибок
 function checkResponse(res) {
   if (res.ok) {

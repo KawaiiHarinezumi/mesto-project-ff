@@ -1,26 +1,21 @@
-// константы полей ввода
-const form = document.querySelector('.popup__form');
-const formInput = form.querySelector('.popup__input');
-const formError = form.querySelector(`.${formInput.id}-error`);
-
 // функция вывода текста ошибки
 function showInputError(inputElement, errorMessage, validationConfig) {
   inputElement.classList.add(validationConfig.inputErrorClass);
-  formError.textContent = errorMessage;
-  formError.classList.add(validationConfig.errorClass);
+  inputElement.nextElementSibling.textContent = errorMessage;
+  inputElement.nextElementSibling.classList.add(validationConfig.errorClass);
 };
 
 // функция скрытия текста ошибки
 function hideInputError(inputElement, validationConfig) {
   inputElement.classList.remove(validationConfig.inputErrorClass);
-  formError.classList.remove(validationConfig.errorClass);
-  formError.textContent = '';
+  inputElement.nextElementSibling.classList.remove(validationConfig.errorClass);
+  inputElement.nextElementSibling.textContent = '';
 };
 
 // функция проверки корректности ввода поля
 function checkInputValidity (inputElement, validationConfig) {
   if (inputElement.validity.patternMismatch) {
-    inputElement.setCustomValidity(" Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы.");
+    inputElement.setCustomValidity(inputElement.dataset.patternError);
   } else {
     inputElement.setCustomValidity("");
   }
